@@ -1,0 +1,69 @@
+@model LibraryManagement.Web.Models.Librarian
+
+@{
+    ViewData["Title"] = "Add New Librarian";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fa fa-user-shield"></i> Add New Librarian</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle"></i> An administrator login account will be automatically generated for this staff member.
+                </div>
+                
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EmployeeId" class="form-label fw-bold"></label>
+                            <input asp-for="EmployeeId" class="form-control" placeholder="e.g. LIB-002" />
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                            <small class="text-muted">This will be used as their Login Username.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Full Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" type="email" placeholder="admin@example.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Phone" class="form-label fw-bold"></label>
+                            <input asp-for="Phone" class="form-control" placeholder="e.g. 555-010-9999" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Age" class="form-label fw-bold"></label>
+                            <input asp-for="Age" class="form-control" type="number" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="mt-4 mb-4"/>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Staff Directory</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fa fa-save"></i> Save Librarian</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

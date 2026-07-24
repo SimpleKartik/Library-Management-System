@@ -1,0 +1,67 @@
+@model LibraryManagement.Web.Models.Student
+
+@{
+    ViewData["Title"] = "Add New Student";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fa fa-user-plus"></i> Add New Student</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle"></i> A default login account will be created automatically for this student.
+                </div>
+                
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="RegistrationNumber" class="form-label fw-bold"></label>
+                            <input asp-for="RegistrationNumber" class="form-control" placeholder="e.g. STU-2024-001" />
+                            <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                            <small class="text-muted">This will be used as the student's Login Username.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Full Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" type="email" placeholder="student@example.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Phone" class="form-label fw-bold"></label>
+                            <input asp-for="Phone" class="form-control" placeholder="e.g. 555-019-2034" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label fw-bold"></label>
+                        <textarea asp-for="Address" class="form-control" rows="3" placeholder="Full mailing address"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <hr class="mt-4 mb-4"/>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fa fa-save"></i> Save Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

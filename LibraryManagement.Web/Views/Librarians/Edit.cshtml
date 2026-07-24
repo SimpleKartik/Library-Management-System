@@ -1,0 +1,67 @@
+@model LibraryManagement.Web.Models.Librarian
+
+@{
+    ViewData["Title"] = "Edit Librarian";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="fa fa-user-edit"></i> Edit Librarian Details</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <!-- Do not map LoginId in the form view to avoid accidental overwrite -->
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EmployeeId" class="form-label fw-bold"></label>
+                            <input asp-for="EmployeeId" class="form-control" />
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Phone" class="form-label fw-bold"></label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Age" class="form-label fw-bold"></label>
+                            <input asp-for="Age" class="form-control" type="number" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="mt-4 mb-4"/>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Directory</a>
+                        <button type="submit" class="btn btn-warning px-5"><i class="fa fa-save"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

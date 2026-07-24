@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="mt-4">
+    <h2>Welcome to your Dashboard, @User.Identity?.Name!</h2>
+    <hr />
+
+    <div class="row mt-4">
+        @if (User.IsInRole("Librarian"))
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card bg-primary text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Admin Controls</h5>
+                        <p class="card-text">Manage users, view all borrowing records, and configure system settings.</p>
+                        <a href="#" class="btn btn-light text-primary mt-2">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Book Inventory</h5>
+                        <p class="card-text">Add, edit, and remove books from the library collection.</p>
+                        <a asp-controller="Books" asp-action="Index" class="btn btn-light text-success mt-2">Manage Books</a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (User.IsInRole("Student"))
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card bg-info text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">My Borrowed Books</h5>
+                        <p class="card-text">View books you currently have checked out and their due dates.</p>
+                        <a href="#" class="btn btn-light text-info mt-2">View Records</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-secondary text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Browse Library</h5>
+                        <p class="card-text">Search for available books to borrow.</p>
+                        <a asp-controller="Books" asp-action="Index" class="btn btn-light text-secondary mt-2">Browse Books</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

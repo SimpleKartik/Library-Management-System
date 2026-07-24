@@ -1,0 +1,68 @@
+@model LibraryManagement.Web.Helpers.PaginatedList<LibraryManagement.Web.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "System Audit Logs";
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+    <h2><i class="fa fa-shield-alt text-primary"></i> System Audit Logs</h2>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Entity</th>
+                        <th>Entity ID</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-4">No audit logs found.</td></tr>
+                    }
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td><small class="text-muted">@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</small></td>
+                            <td class="fw-bold">@log.Username</td>
+                            <td>
+                                @if(log.ActionType == "Borrow" || log.ActionType == "Create")
+                                {
+                                    <span class="badge bg-success">@log.ActionType</span>
+                                }
+                                else if (log.ActionType == "Delete" || log.ActionType == "Return")
+                                {
+                                    <span class="badge bg-danger">@log.ActionType</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@log.ActionType</span>
+                                }
+                            </td>
+                            <td>@log.EntityName</td>
+                            <td>@log.EntityId</td>
+                            <td><small>@log.Details</small></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" class="btn btn-outline-primary @prevDisabled">Previous</a>
+    <span class="mx-2 text-muted">Page @Model.PageIndex of @Model.TotalPages</span>
+    <a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" class="btn btn-outline-primary @nextDisabled">Next</a>
+</div>

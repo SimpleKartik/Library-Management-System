@@ -1,0 +1,133 @@
+@model LibraryManagement.Web.Helpers.PaginatedList<LibraryManagement.Web.Models.Book>
+
+@{
+    ViewData["Title"] = "Books Directory";
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+    <h2><i class="fa fa-book text-primary"></i> Books Directory</h2>
+    @if (User.IsInRole("Librarian"))
+    {
+        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Book</a>
+    }
+</div>
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search by title, author, or ISBN..." />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-secondary w-100">Search</button>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear Filter</a>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
+        <thead class="table-dark">
+            <tr>
+                <th>Cover</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="text-white text-decoration-none">
+                        Title <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="text-white text-decoration-none">
+                        Author <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>ISBN</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["CopiesSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="text-white text-decoration-none">
+                        Available <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="~/images/books/@item.ImageUrl" alt="Cover" class="img-thumbnail" style="max-width: 60px; max-height: 80px;" />
+                        }
+                        else
+                        {
+                            <div class="bg-light text-center border text-muted d-flex align-items-center justify-content-center" style="width: 60px; height: 80px; font-size: 0.8rem;">No Img</div>
+                        }
+                    </td>
+                    <td class="fw-bold">@item.Title</td>
+                    <td>@item.Author</td>
+                    <td>@item.ISBN</td>
+                    <td>
+                        @if (item.AvailableCopies > 0)
+                        {
+                            <span class="badge bg-success rounded-pill px-3">@item.AvailableCopies / @item.TotalCopies</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger rounded-pill px-3">Checked Out</span>
+                        }
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white"><i class="fa fa-eye"></i></a>
+                        
+                        @if (User.IsInRole("Librarian"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" class="d-inline form-delete" method="post" data-confirm-message="Are you sure you want to completely remove this book?">
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                            </form>
+                        }
+
+                        @if (User.IsInRole("Student"))
+                        {
+                            if (item.AvailableCopies > 0)
+                            {
+                                <form asp-controller="BorrowRecords" asp-action="Borrow" class="d-inline" method="post">
+                                    <input type="hidden" name="bookId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-primary">Borrow</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-secondary" disabled>Unavailable</button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-3">
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-primary @prevDisabled">
+        Previous
+    </a>
+    <span class="mx-2 text-muted">Page @Model.PageIndex of @Model.TotalPages</span>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-primary @nextDisabled">
+        Next
+    </a>
+</div>

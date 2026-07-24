@@ -1,0 +1,248 @@
+@model LibraryManagement.Web.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="fa fa-tachometer-alt text-primary"></i> Admin Dashboard</h2>
+    <span class="text-muted">Welcome, @User.Identity?.Name</span>
+</div>
+
+<!-- Stats Row 1 -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 bg-primary text-white h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="fs-1 me-4"><i class="fa fa-book"></i></div>
+                <div>
+                    <h6 class="card-title text-uppercase text-white-50 mb-1">Total Books</h6>
+                    <h2 class="mb-0">@Model.TotalBooks</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 bg-info text-white h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="fs-1 me-4"><i class="fa fa-user-graduate"></i></div>
+                <div>
+                    <h6 class="card-title text-uppercase text-white-50 mb-1">Total Students</h6>
+                    <h2 class="mb-0">@Model.TotalStudents</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 bg-secondary text-white h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="fs-1 me-4"><i class="fa fa-id-badge"></i></div>
+                <div>
+                    <h6 class="card-title text-uppercase text-white-50 mb-1">Total Librarians</h6>
+                    <h2 class="mb-0">@Model.TotalLibrarians</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Row 2 -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-warning h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Borrowed Books</h6>
+                <h3 class="text-dark mb-0">@Model.BorrowedBooks</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-success h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Available Books</h6>
+                <h3 class="text-dark mb-0">@Model.AvailableBooks</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-primary h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold mb-2">Returned Books</h6>
+                <h3 class="text-dark mb-0">@Model.ReturnedBooks</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Charts Row -->
+<div class="row mb-5">
+    <!-- Borrow Analytics (Bar Chart) -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h5 class="card-title fw-bold text-secondary"><i class="fa fa-chart-bar text-primary"></i> Borrow Analytics (Last 7 Days)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="borrowChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Book Status (Doughnut Chart) -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h5 class="card-title fw-bold text-secondary"><i class="fa fa-chart-pie text-success"></i> Book Availability Status</h5>
+            </div>
+            <div class="card-body d-flex justify-content-center align-items-center">
+                <canvas id="statusChart" style="max-height: 250px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Tables Row -->
+<div class="row">
+    <!-- Recently Added Books -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h5 class="card-title fw-bold text-dark"><i class="fa fa-clock text-info"></i> Recently Added Books</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Available</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.RecentlyAddedBooks.Any())
+                            {
+                                <tr><td colspan="3" class="text-center text-muted">No books found.</td></tr>
+                            }
+                            @foreach (var book in Model.RecentlyAddedBooks)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@book.Title</td>
+                                    <td>@book.Author</td>
+                                    <td><span class="badge bg-success">@book.AvailableCopies</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Borrow Activities -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h5 class="card-title fw-bold text-dark"><i class="fa fa-exchange-alt text-warning"></i> Recent Borrow Activities</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Book</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.RecentBorrowActivities.Any())
+                            {
+                                <tr><td colspan="4" class="text-center text-muted">No activities found.</td></tr>
+                            }
+                            @foreach (var record in Model.RecentBorrowActivities)
+                            {
+                                <tr>
+                                    <td>@(record.Student?.Name ?? "Unknown")</td>
+                                    <td>@(record.Book?.Title ?? "Unknown")</td>
+                                    <td>@record.BorrowDate.ToString("MMM dd")</td>
+                                    <td>
+                                        @if (record.Status == "Borrowed")
+                                        {
+                                            <span class="badge bg-warning text-dark">Borrowed</span>
+                                        }
+                                        else if (record.Status == "Returned")
+                                        {
+                                            <span class="badge bg-primary">Returned</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">@record.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Borrow Analytics Chart
+    const ctxBorrow = document.getElementById('borrowChart').getContext('2d');
+    new Chart(ctxBorrow, {
+        type: 'bar',
+        data: {
+            labels: [@Html.Raw(ViewBag.ChartLabels)],
+            datasets: [{
+                label: 'Books Borrowed',
+                data: [@ViewBag.ChartData],
+                backgroundColor: 'rgba(79, 70, 229, 0.7)',
+                borderColor: 'rgba(79, 70, 229, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+
+    // Book Status Chart
+    const ctxStatus = document.getElementById('statusChart').getContext('2d');
+    new Chart(ctxStatus, {
+        type: 'doughnut',
+        data: {
+            labels: ['Available', 'Borrowed'],
+            datasets: [{
+                data: [@ViewBag.AvailableCopies, @ViewBag.BorrowedCopies],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)', // Green
+                    'rgba(245, 158, 11, 0.8)'  // Orange
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%'
+        }
+    });
+});
+</script>

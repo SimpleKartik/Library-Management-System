@@ -1,0 +1,148 @@
+@model LibraryManagement.Web.Helpers.PaginatedList<LibraryManagement.Web.ViewModels.BorrowRecordViewModel>
+
+@{
+    ViewData["Title"] = "Borrow Ledger";
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+    <h2><i class="fa fa-history text-primary"></i> Borrow History</h2>
+    @if (User.IsInRole("Librarian"))
+    {
+        <div>
+            <a asp-controller="Reports" asp-action="ExportBorrowHistoryExcel" class="btn btn-success me-2"><i class="fa fa-file-excel"></i> Export Excel</a>
+            <button onclick="exportToPdf()" class="btn btn-danger"><i class="fa fa-file-pdf"></i> Export PDF</button>
+        </div>
+    }
+</div>
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search title, student, or status..." />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-secondary w-100">Search</button>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear Filter</a>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive" id="printableTable">
+    <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
+        <thead class="table-dark">
+            <tr>
+                @if (User.IsInRole("Librarian"))
+                {
+                    <th>Student Name</th>
+                }
+                <th>Book Title</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="text-white text-decoration-none">
+                        Borrow Date <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="text-white text-decoration-none">
+                        Status <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                @if (User.IsInRole("Student"))
+                {
+                    <th class="text-end">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="@(User.IsInRole("Librarian") ? "6" : "6")" class="text-center text-muted">No records found.</td></tr>
+            }
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.IsOverdue ? "table-danger" : "")">
+                    @if (User.IsInRole("Librarian"))
+                    {
+                        <td class="fw-bold">@item.StudentName</td>
+                    }
+                    <td class="fw-bold text-primary">@item.BookTitle</td>
+                    <td>@item.BorrowDate.ToShortDateString()</td>
+                    <td>@item.DueDate.ToShortDateString()</td>
+                    <td>@(item.ReturnDate.HasValue ? item.ReturnDate.Value.ToShortDateString() : "-")</td>
+                    <td>
+                        @if (item.IsOverdue)
+                        {
+                            <span class="badge bg-danger rounded-pill px-3 py-2"><i class="fa fa-exclamation-circle"></i> Overdue</span>
+                        }
+                        else if (item.Status == "Borrowed")
+                        {
+                            <span class="badge bg-warning text-dark rounded-pill px-3">Active</span>
+                        }
+                        else if (item.Status == "Returned")
+                        {
+                            <span class="badge bg-success rounded-pill px-3">Returned</span>
+                        }
+                        else if (item.Status == "Returned (Late)")
+                        {
+                            <span class="badge bg-secondary rounded-pill px-3">Returned (Late)</span>
+                        }
+                    </td>
+                    @if (User.IsInRole("Student"))
+                    {
+                        <td class="text-end">
+                            @if (item.Status == "Borrowed")
+                            {
+                                <form asp-action="Return" method="post" onsubmit="return confirm('Confirm returning this book?');">
+                                    <input type="hidden" name="recordId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-primary">Return</button>
+                                </form>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-3">
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-primary @prevDisabled">
+        Previous
+    </a>
+    <span class="mx-2 text-muted">Page @Model.PageIndex of @Model.TotalPages</span>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-primary @nextDisabled">
+        Next
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        function exportToPdf() {
+            var element = document.getElementById('printableTable');
+            var opt = {
+                margin:       10,
+                filename:     'BorrowHistory.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+}

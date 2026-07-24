@@ -1,0 +1,81 @@
+@model LibraryManagement.Web.ViewModels.BookFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="fa fa-edit"></i> Edit Book</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ExistingImageUrl" />
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label asp-for="Title" class="form-label fw-bold"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ISBN" class="form-label fw-bold"></label>
+                                <input asp-for="ISBN" class="form-control" />
+                                <span asp-validation-for="ISBN" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Author" class="form-label fw-bold"></label>
+                                <input asp-for="Author" class="form-control" />
+                                <span asp-validation-for="Author" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Publisher" class="form-label fw-bold"></label>
+                                <input asp-for="Publisher" class="form-control" />
+                                <span asp-validation-for="Publisher" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="TotalCopies" class="form-label fw-bold"></label>
+                                <input asp-for="TotalCopies" class="form-control" />
+                                <span asp-validation-for="TotalCopies" class="text-danger"></span>
+                                <small class="text-muted">Available copies will adjust automatically.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="CoverImage" class="form-label fw-bold"></label>
+                                <input asp-for="CoverImage" class="form-control" type="file" accept="image/*" />
+                                <small class="text-muted">Upload a new image to replace the existing one.</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <label class="form-label fw-bold d-block">Current Cover</label>
+                            @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+                            {
+                                <img src="~/images/books/@Model.ExistingImageUrl" alt="Cover" class="img-fluid img-thumbnail" />
+                            }
+                            else
+                            {
+                                <div class="bg-light border d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 200px;">
+                                    <span class="text-muted">No Image</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <hr class="mt-4 mb-4"/>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
+                        <button type="submit" class="btn btn-warning px-5"><i class="fa fa-save"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
