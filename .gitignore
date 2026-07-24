@@ -1,0 +1,44 @@
+# Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / IDE Files
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Environment variables and secrets
+appsettings.Development.json
+appsettings.json
+secrets.json
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# NuGet Packages
+*.nupkg
+packages/
