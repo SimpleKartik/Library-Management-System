@@ -144,3 +144,4 @@ c:\Users\karti\OneDrive\Desktop\LibraryManagementSystem\LibraryManagement.Web\ob
 c:\Users\karti\OneDrive\Desktop\LibraryManagementSystem\LibraryManagement.Web\obj\Debug\net10.0\LibraryManagement.Web.pdb
 c:\Users\karti\OneDrive\Desktop\LibraryManagementSystem\LibraryManagement.Web\obj\Debug\net10.0\LibraryManagement.Web.genruntimeconfig.cache
 c:\Users\karti\OneDrive\Desktop\LibraryManagementSystem\LibraryManagement.Web\obj\Debug\net10.0\ref\LibraryManagement.Web.dll
+c:\Users\karti\OneDrive\Desktop\LibraryManagementSystem\LibraryManagement.Web\obj\Debug\net10.0\LibraryManagement.Web.sourcelink.json
