@@ -6,7 +6,7 @@
 
 A robust, enterprise-grade Library Management System built with **ASP.NET Core MVC**. This application streamlines the borrowing process, automates inventory tracking, generates high-level analytics, and maintains strict administrative audit logs.
 
-## 🚀 Key Features
+## Key Features
 
 * **Role-Based Authentication**: Distinct, secure portals for `Librarians` (Administrators) and `Students`.
 * **Visual Dashboard Analytics**: Real-time insights generated via `Chart.js`, tracking 7-day borrowing histories and live inventory statuses.
@@ -17,7 +17,7 @@ A robust, enterprise-grade Library Management System built with **ASP.NET Core M
 * **System Audit Trails**: A strict Entity Framework Core pipeline interceptor that permanently logs all `Create`, `Edit`, and `Delete` actions performed by administrators.
 * **Modern UI/UX**: Fully responsive Sidebar layout, dynamic Dark/Light modes, interactive DataTables, and Toastr/SweetAlert2 notifications.
 
-## 🏗️ Architecture & Design Patterns
+## Architecture & Design Patterns
 
 This project adheres to **SOLID** principles and modern software architecture guidelines:
 
@@ -26,7 +26,7 @@ This project adheres to **SOLID** principles and modern software architecture gu
 * **Dependency Injection (DI)**: Services (like `IEmailService` and `IRepository`) are securely bound to the scoped lifecycle in `Program.cs`.
 * **Performance Optimizations**: Heavy read operations (like loading the Student Directory) explicitly enforce `.AsNoTracking()` to bypass Entity Framework's change tracker, drastically reducing memory overhead.
 
-## 💻 Tech Stack
+## Tech Stack
 
 * **Backend**: C#, .NET 10.0, ASP.NET Core MVC
 * **Database**: Microsoft SQL Server
@@ -34,7 +34,7 @@ This project adheres to **SOLID** principles and modern software architecture gu
 * **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
 * **Libraries**: Chart.js, ClosedXML, Toastr.js, SweetAlert2, html2pdf.js
 
-## ⚙️ Local Setup & Installation
+## Local Setup & Installation
 
 ### Prerequisites
 * [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
@@ -68,7 +68,7 @@ This project adheres to **SOLID** principles and modern software architecture gu
    ```
    Navigate to `http://localhost:<port>` in your web browser.
 
-## 🔑 Default Credentials
+## Default Credentials
 
 The database is seeded with two default accounts for immediate testing:
 
