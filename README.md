@@ -1,8 +1,6 @@
 # Enterprise Library Management System
 
-![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)
-![SQL Server](https://img.shields.io/badge/SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap_5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 
 A robust, enterprise-grade Library Management System built with **ASP.NET Core MVC**. This application streamlines the borrowing process, automates inventory tracking, generates high-level analytics, and maintains strict administrative audit logs.
 
